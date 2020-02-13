@@ -10,18 +10,26 @@ namespace GuesserLab
         TooHigh, 
         Match, 
         TooLow,
-        WayTooLow
+        WayTooLow,
+        Start
     }
-    class GuessingGame
+    public class GuessingGame
     {
+        public int Min { get; set; }
+        public int Max { get; set; }
         private int SecretNum { get; }
+        public GuessQuality LastGuess = GuessQuality.Start;
         public GuessingGame()
         {
+            Min = 1;
+            Max = 100;
             Random r = new Random();
-            SecretNum = r.Next(1, 101);
+            SecretNum = r.Next(Min, Max +1);
         }
-        public GuessingGame(int SecretNum)
+        public GuessingGame(int SecretNum, int Min, int Max)
         {
+            this.Min = Min;
+            this.Max = Max;
             this.SecretNum = SecretNum;
         }
 
@@ -29,18 +37,18 @@ namespace GuesserLab
         {
             if(input == SecretNum)
             {
-                return GuessQuality.Match;
+                LastGuess = GuessQuality.Match;
             }
             else if(input > SecretNum)
             {
                 int diff =  input - SecretNum;
                 if(diff < 10)
                 {
-                    return GuessQuality.TooHigh;
+                    LastGuess = GuessQuality.TooHigh;
                 }
                 else
                 {
-                    return GuessQuality.WayTooHigh;
+                    LastGuess = GuessQuality.WayTooHigh;
                 }
             }
             else
@@ -48,13 +56,14 @@ namespace GuesserLab
                 int diff = SecretNum - input;
                 if (diff < 10)
                 {
-                    return GuessQuality.TooLow;
+                    LastGuess = GuessQuality.TooLow;
                 }
                 else
                 {
-                    return GuessQuality.WayTooLow;
+                    LastGuess = GuessQuality.WayTooLow;
                 }
             }
+            return LastGuess;
         }
 
     }

@@ -12,16 +12,16 @@ namespace GuesserLab
             this.g = g;
         }
 
-        public int CountTries()
+        public int CountTries(GuessingGame gg)
         {
-            GuessingGame gg = new GuessingGame();
-            GuessQuality output = GuessQuality.TooLow;
+            GuessQuality output = GuessQuality.Start;
             int tries = 0;
             while (output != GuessQuality.Match)
             {
                 tries++;
                 int guess = g.GenerateGuess();
                 output = gg.MakeGuess(guess);
+                g.LastGuess = output;
             }
 
             return tries;
